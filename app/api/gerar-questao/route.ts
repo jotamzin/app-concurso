@@ -61,7 +61,34 @@ Responda APENAS em JSON válido, nesse formato exato, sem markdown, sem texto an
     const cleanText = rawText.replace(/```json|```/g, "").trim();
     const questao = JSON.parse(cleanText);
 
-    return NextResponse.json(questao);
+    // Embaralha as alternativas pra não ficar sempre a mesma letra certa
+    const letras = ["A", "B", "C", "D", "E"] as const;
+    const valoresOriginais = letras.map((letra) => questao.alternativas[letra]);
+    const respostaCorretaTexto = questao.alternativas[questao.correta];
+
+    // Embaralha o array de valores
+    for (let i = valoresOriginais.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [valoresOriginais[i], valoresOriginais[j]] = [valoresOriginais[j], valoresOriginais[i]];
+    }
+
+    const novasAlternativas: Record<string, string> = {};
+    let novaCorreta = "A";
+
+    letras.forEach((letra, index) => {
+      novasAlternativas[letra] = valoresOriginais[index];
+      if (valoresOriginais[index] === respostaCorretaTexto) {
+        novaCorreta = letra;
+      }
+    });
+
+    const questaoFinal = {
+      ...questao,
+      alternativas: novasAlternativas,
+      correta: novaCorreta,
+    };
+
+    return NextResponse.json(questaoFinal);
   } catch (error) {
     console.error("Erro ao gerar questão:", error);
     return NextResponse.json(
