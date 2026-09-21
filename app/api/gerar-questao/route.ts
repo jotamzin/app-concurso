@@ -37,23 +37,26 @@ Responda APENAS em JSON válido, nesse formato exato, sem markdown, sem texto an
   "comentario": "explicação detalhada do gabarito"
 }`;
 
-    const response = await fetch("http://localhost:11434/api/generate", {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+      },
       body: JSON.stringify({
-        model: "llama3.2",
-        prompt: prompt,
-        stream: false,
-        format: "json",
+        model: "openai/gpt-oss-120b",
+        messages: [{ role: "user", content: prompt }],
+        response_format: { type: "json_object" },
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`Ollama respondeu com status ${response.status}`);
+      const errText = await response.text();
+      throw new Error(`Groq respondeu ${response.status}: ${errText}`);
     }
 
     const data = await response.json();
-    const rawText = data.response || "";
+    const rawText = data.choices?.[0]?.message?.content || "";
 
     const cleanText = rawText.replace(/```json|```/g, "").trim();
     const questao = JSON.parse(cleanText);
