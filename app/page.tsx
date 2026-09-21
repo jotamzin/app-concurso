@@ -9,10 +9,73 @@ interface Questao {
   comentario: string;
 }
 
+const CONCURSOS = [
+  "PRF",
+  "PF",
+  "PM",
+  "PC",
+  "Bombeiro Militar",
+  "TJ",
+  "TRT",
+  "TRF",
+  "TRE",
+  "MPU",
+  "INSS",
+  "Receita Federal",
+  "Receita Estadual",
+  "Câmara dos Deputados",
+  "Senado Federal",
+  "Tribunal de Contas",
+  "Banco Central",
+  "Correios",
+  "IBGE",
+  "Agente Penitenciário",
+  "Guarda Municipal",
+  "Prefeitura Municipal",
+  "Concurso Militar (Forças Armadas)",
+];
+
+const MATERIAS = [
+  "Direito Constitucional",
+  "Direito Administrativo",
+  "Direito Penal",
+  "Direito Civil",
+  "Direito Processual Civil",
+  "Direito Processual Penal",
+  "Direito Tributário",
+  "Direito do Trabalho",
+  "Direito Previdenciário",
+  "Direitos Humanos",
+  "Português",
+  "Redação Oficial",
+  "Raciocínio Lógico",
+  "Matemática",
+  "Informática",
+  "Atualidades",
+  "Legislação Especial",
+  "Administração Pública",
+  "Contabilidade Pública",
+  "Ética no Serviço Público",
+];
+
+const BANCAS = [
+  "Cespe/Cebraspe",
+  "FGV",
+  "FCC",
+  "Vunesp",
+  "IBFC",
+  "Cesgranrio",
+  "AOCP",
+  "Instituto Access",
+  "Quadrix",
+  "IADES",
+  "Consulplan",
+];
+
 export default function Home() {
-  const [concurso, setConcurso] = useState("PRF");
-  const [materia, setMateria] = useState("Direito Constitucional");
-  const [banca, setBanca] = useState("Cespe");
+  const [concurso, setConcurso] = useState(CONCURSOS[0]);
+  const [materia, setMateria] = useState(MATERIAS[0]);
+  const [banca, setBanca] = useState(BANCAS[0]);
   const [questao, setQuestao] = useState<Questao | null>(null);
   const [selecionada, setSelecionada] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -52,32 +115,41 @@ export default function Home() {
         <div className="bg-gray-900 rounded-xl p-6 mb-6 space-y-4">
           <div>
             <label className="block text-sm mb-1 text-gray-400">Concurso</label>
-            <input
+            <select
               className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500"
               value={concurso}
               onChange={(e) => setConcurso(e.target.value)}
-              placeholder="Ex: PRF, PM, TJ, INSS"
-            />
+            >
+              {CONCURSOS.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
           </div>
 
           <div>
             <label className="block text-sm mb-1 text-gray-400">Matéria</label>
-            <input
+            <select
               className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500"
               value={materia}
               onChange={(e) => setMateria(e.target.value)}
-              placeholder="Ex: Direito Constitucional"
-            />
+            >
+              {MATERIAS.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
           </div>
 
           <div>
             <label className="block text-sm mb-1 text-gray-400">Banca (opcional)</label>
-            <input
+            <select
               className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500"
               value={banca}
               onChange={(e) => setBanca(e.target.value)}
-              placeholder="Ex: Cespe, FGV"
-            />
+            >
+              {BANCAS.map((b) => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
           </div>
 
           <button
