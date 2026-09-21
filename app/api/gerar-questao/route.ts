@@ -1,0 +1,69 @@
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest) {
+  try {
+    const { concurso, materia, banca } = await req.json();
+
+    if (!concurso || !materia) {
+      return NextResponse.json(
+        { error: "concurso e materia são obrigatórios" },
+        { status: 400 }
+      );
+    }
+
+    const prompt = `Você é um especialista em elaborar questões de concursos públicos no Brasil.
+
+Gere 1 questão de múltipla escolha INÉDITA para o concurso "${concurso}", matéria "${materia}"${
+      banca ? `, no estilo da banca ${banca}` : ""
+    }.
+
+Regras:
+- 5 alternativas (A a E), apenas 1 correta
+- Nível de dificuldade compatível com concurso público real
+- Depois da questão, escreva um gabarito comentado explicando por que a alternativa correta está certa e por que as outras estão erradas
+
+Responda APENAS em JSON válido, nesse formato exato, sem markdown, sem texto antes ou depois:
+
+{
+  "enunciado": "texto da questão",
+  "alternativas": {
+    "A": "texto",
+    "B": "texto",
+    "C": "texto",
+    "D": "texto",
+    "E": "texto"
+  },
+  "correta": "A",
+  "comentario": "explicação detalhada do gabarito"
+}`;
+
+    const response = await fetch("http://localhost:11434/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "llama3.2",
+        prompt: prompt,
+        stream: false,
+        format: "json",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Ollama respondeu com status ${response.status}`);
+    }
+
+    const data = await response.json();
+    const rawText = data.response || "";
+
+    const cleanText = rawText.replace(/```json|```/g, "").trim();
+    const questao = JSON.parse(cleanText);
+
+    return NextResponse.json(questao);
+  } catch (error) {
+    console.error("Erro ao gerar questão:", error);
+    return NextResponse.json(
+      { error: "Erro ao gerar questão" },
+      { status: 500 }
+    );
+  }
+}
