@@ -10,69 +10,28 @@ interface Questao {
 }
 
 const CONCURSOS = [
-  "PRF",
-  "PF",
-  "PM",
-  "PC",
-  "Bombeiro Militar",
-  "TJ",
-  "TRT",
-  "TRF",
-  "TRE",
-  "MPU",
-  "INSS",
-  "Receita Federal",
-  "Receita Estadual",
-  "Câmara dos Deputados",
-  "Senado Federal",
-  "Tribunal de Contas",
-  "Banco Central",
-  "Correios",
-  "IBGE",
-  "Agente Penitenciário",
-  "Guarda Municipal",
-  "Prefeitura Municipal",
+  "PRF", "PF", "PM", "PC", "Bombeiro Militar", "TJ", "TRT", "TRF", "TRE",
+  "MPU", "INSS", "Receita Federal", "Receita Estadual", "Câmara dos Deputados",
+  "Senado Federal", "Tribunal de Contas", "Banco Central", "Correios", "IBGE",
+  "Agente Penitenciário", "Guarda Municipal", "Prefeitura Municipal",
   "Concurso Militar (Forças Armadas)",
 ];
 
 const MATERIAS = [
-  "Direito Constitucional",
-  "Direito Administrativo",
-  "Direito Penal",
-  "Direito Civil",
-  "Direito Processual Civil",
-  "Direito Processual Penal",
-  "Direito Tributário",
-  "Direito do Trabalho",
-  "Direito Previdenciário",
-  "Direitos Humanos",
-  "Português",
-  "Redação Oficial",
-  "Raciocínio Lógico",
-  "Matemática",
-  "Informática",
-  "Atualidades",
-  "Legislação Especial",
-  "Administração Pública",
-  "Contabilidade Pública",
-  "Ética no Serviço Público",
+  "Direito Constitucional", "Direito Administrativo", "Direito Penal",
+  "Direito Civil", "Direito Processual Civil", "Direito Processual Penal",
+  "Direito Tributário", "Direito do Trabalho", "Direito Previdenciário",
+  "Direitos Humanos", "Português", "Redação Oficial", "Raciocínio Lógico",
+  "Matemática", "Informática", "Atualidades", "Legislação Especial",
+  "Administração Pública", "Contabilidade Pública", "Ética no Serviço Público",
 ];
 
 const BANCAS = [
-  "Cespe/Cebraspe",
-  "FGV",
-  "FCC",
-  "Vunesp",
-  "IBFC",
-  "Cesgranrio",
-  "AOCP",
-  "Instituto Access",
-  "Quadrix",
-  "IADES",
-  "Consulplan",
+  "Cespe/Cebraspe", "FGV", "FCC", "Vunesp", "IBFC", "Cesgranrio",
+  "AOCP", "Instituto Access", "Quadrix", "IADES", "Consulplan",
 ];
 
-export default function Home() {
+export default function Questoes() {
   const [concurso, setConcurso] = useState(CONCURSOS[0]);
   const [materia, setMateria] = useState(MATERIAS[0]);
   const [banca, setBanca] = useState(BANCAS[0]);
@@ -106,17 +65,17 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-6">
+    <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold mb-6 text-center mt-4">
           Gerar Questão
         </h1>
 
-        <div className="bg-gray-900 rounded-xl p-6 mb-6 space-y-4">
+        <div className="bg-gray-900 rounded-xl p-6 mb-6 space-y-4 border border-gray-800">
           <div>
             <label className="block text-sm mb-1 text-gray-400">Concurso</label>
             <select
-              className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-gray-500"
               value={concurso}
               onChange={(e) => setConcurso(e.target.value)}
             >
@@ -129,7 +88,7 @@ export default function Home() {
           <div>
             <label className="block text-sm mb-1 text-gray-400">Matéria</label>
             <select
-              className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-gray-500"
               value={materia}
               onChange={(e) => setMateria(e.target.value)}
             >
@@ -142,7 +101,7 @@ export default function Home() {
           <div>
             <label className="block text-sm mb-1 text-gray-400">Banca (opcional)</label>
             <select
-              className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-800 rounded-lg p-3 outline-none focus:ring-2 focus:ring-gray-500"
               value={banca}
               onChange={(e) => setBanca(e.target.value)}
             >
@@ -155,7 +114,7 @@ export default function Home() {
           <button
             onClick={gerarQuestao}
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 rounded-lg p-3 font-semibold transition"
+            className="w-full bg-white text-black hover:bg-gray-200 disabled:bg-gray-700 disabled:text-gray-400 rounded-lg p-3 font-semibold transition"
           >
             {loading ? "Gerando questão..." : "Gerar Questão"}
           </button>
@@ -168,7 +127,7 @@ export default function Home() {
         )}
 
         {questao && (
-          <div className="bg-gray-900 rounded-xl p-6 space-y-4">
+          <div className="bg-gray-900 rounded-xl p-6 space-y-4 border border-gray-800">
             <p className="text-lg">{questao.enunciado}</p>
 
             <div className="space-y-2">
@@ -204,7 +163,7 @@ export default function Home() {
                 <p className="text-gray-300 text-sm">{questao.comentario}</p>
                 <button
                   onClick={gerarQuestao}
-                  className="mt-4 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 text-sm font-semibold"
+                  className="mt-4 bg-white text-black hover:bg-gray-200 rounded-lg px-4 py-2 text-sm font-semibold"
                 >
                   Próxima questão →
                 </button>
